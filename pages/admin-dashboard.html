@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - WellnessHub</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo">WellnessHub Admin</div>
+      <nav>
+        <ul>
+          <li><a href="#" onclick="loadSection('dashboard')">Dashboard</a></li>
+          <li><a href="#" onclick="loadSection('analytics')">Analytics</a></li>
+          <li><a href="#" onclick="loadSection('users')">Users</a></li>
+          <li><a href="#" onclick="loadSection('subscriptions')">Subscriptions</a></li>
+        </ul>
+      </nav>
+      <div class="nav-buttons">
+        <button class="btn btn-outline btn-small" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h3 style="margin-bottom: 1.5rem; color: #1f2937;">Admin Menu</h3>
+      <ul class="sidebar-menu">
+        <li><a href="#" onclick="loadSection('dashboard')" class="active">📊 Dashboard</a></li>
+        <li><a href="#" onclick="loadSection('analytics')">📈 Analytics</a></li>
+        <li><a href="#" onclick="loadSection('users')">👥 Users</a></li>
+        <li><a href="#" onclick="loadSection('subscriptions')">💳 Subscriptions</a></li>
+        <li><a href="#" onclick="loadSection('engagement')">⚡ Engagement</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Section -->
+      <section id="dashboard-section" class="section">
+        <h1 style="font-size: 2rem; color: #1f2937; margin-bottom: 2rem;">Platform Overview</h1>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value" id="total-users">0</div>
+          </div>
+          <div class="stat-card secondary">
+            <div class="stat-label">Active Trainers</div>
+            <div class="stat-value" id="active-trainers">0</div>
+          </div>
+          <div class="stat-card accent">
+            <div class="stat-label">Total Workouts</div>
+            <div class="stat-value" id="total-workouts">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Community Posts</div>
+            <div class="stat-value" id="total-posts">0</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">User Distribution by Role</div>
+            </div>
+            <div style="position: relative; height: 300px; margin-top: 1rem;">
+              <canvas id="user-role-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Subscription Distribution</div>
+            </div>
+            <div style="position: relative; height: 300px; margin-top: 1rem;">
+              <canvas id="subscription-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <div class="card-title">Weekly Activity Trend</div>
+          </div>
+          <div style="position: relative; height: 300px; margin-top: 1rem;">
+            <canvas id="activity-chart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analytics Section -->
+      <section id="analytics-section" class="section hidden">
+        <h1 style="font-size: 2rem; color: #1f2937; margin-bottom: 2rem;">Platform Analytics</h1>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Users by Role</div>
+            </div>
+            <div id="analytics-users" style="margin-top: 1rem;"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Subscription Plans</div>
+            </div>
+            <div id="analytics-subscriptions" style="margin-top: 1rem;"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <div class="card-title">Platform Usage Statistics</div>
+          </div>
+          <div style="margin-top: 1rem; display: grid; gap: 1rem;">
+            <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+              <span>Total Workouts Logged</span>
+              <strong id="stat-workouts">0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+              <span>Total Community Posts</span>
+              <strong id="stat-posts">0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+              <span>Active Trainer-Client Relationships</span>
+              <strong id="stat-relationships">0</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Users Section -->
+      <section id="users-section" class="section hidden">
+        <h1 style="font-size: 2rem; color: #1f2937; margin-bottom: 2rem;">User Management</h1>
+
+        <div class="card">
+          <div style="margin-bottom: 1.5rem;">
+            <input type="text" id="search-users" placeholder="Search users..." style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.5rem;">
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-table">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 2rem; color: #6b7280;">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Subscriptions Section -->
+      <section id="subscriptions-section" class="section hidden">
+        <h1 style="font-size: 2rem; color: #1f2937; margin-bottom: 2rem;">Subscription Management</h1>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Plan</th>
+                  <th>Status</th>
+                  <th>Price/Month</th>
+                  <th>Auto-Renew</th>
+                </tr>
+              </thead>
+              <tbody id="subscriptions-table">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 2rem; color: #6b7280;">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Engagement Section -->
+      <section id="engagement-section" class="section hidden">
+        <h1 style="font-size: 2rem; color: #1f2937; margin-bottom: 2rem;">Engagement Metrics</h1>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Active Users (30d)</div>
+            <div class="stat-value" id="active-users-30d">0</div>
+          </div>
+          <div class="stat-card secondary">
+            <div class="stat-label">Community Contributors</div>
+            <div class="stat-value" id="community-contributors">0</div>
+          </div>
+          <div class="stat-card accent">
+            <div class="stat-label">Trainer Connections</div>
+            <div class="stat-value" id="trainer-connections">0</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <div class="card-title">Engagement Summary</div>
+          </div>
+          <div style="margin-top: 1rem; display: grid; gap: 1rem;" id="engagement-summary"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const userRole = localStorage.getItem('userRole');
+
+      if (!token || userRole !== 'admin') {
+        window.location.href = '/login';
+        return;
+      }
+
+      loadSection('dashboard');
+      loadDashboardData();
+    });
+
+    async function loadDashboardData() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/admin/analytics', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        // Update dashboard stats
+        document.getElementById('total-users').textContent = data.totalUsers;
+        document.getElementById('total-workouts').textContent = data.totalWorkouts;
+        document.getElementById('total-posts').textContent = data.totalPosts;
+
+        const trainers = data.usersByRole?.find(r => r.role === 'trainer');
+        document.getElementById('active-trainers').textContent = trainers?.count || 0;
+
+        // Update analytics section
+        document.getElementById('stat-workouts').textContent = data.totalWorkouts;
+        document.getElementById('stat-posts').textContent = data.totalPosts;
+        document.getElementById('stat-relationships').textContent = data.activeTrainerRelationships;
+
+        // Create charts
+        createRoleChart(data.usersByRole);
+        createSubscriptionChart(data.activeSubscriptions);
+        createActivityChart(data.workoutTrends);
+
+        // Load analytics data
+        loadAnalyticsData(data);
+
+        // Load users and subscriptions
+        loadUsers();
+        loadSubscriptions();
+
+        // Load engagement data
+        loadEngagementData();
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+      }
+    }
+
+    function createRoleChart(usersByRole) {
+      const ctx = document.getElementById('user-role-chart');
+      if (ctx && usersByRole && usersByRole.length > 0) {
+        const labels = usersByRole.map(r => r.role?.charAt(0).toUpperCase() + r.role?.slice(1));
+        const data = usersByRole.map(r => r.count);
+
+        new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              backgroundColor: ['#4f46e5', '#10b981', '#f59e0b']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      }
+    }
+
+    function createSubscriptionChart(subscriptions) {
+      const ctx = document.getElementById('subscription-chart');
+      if (ctx && subscriptions && subscriptions.length > 0) {
+        const labels = subscriptions.map(s => s.plan_type?.toUpperCase());
+        const data = subscriptions.map(s => s.count);
+
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ef4444']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      }
+    }
+
+    function createActivityChart(trends) {
+      const ctx = document.getElementById('activity-chart');
+      if (ctx && trends && trends.length > 0) {
+        const dates = trends.map(t => new Date(t.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        const counts = trends.map(t => t.count);
+
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: dates,
+            datasets: [{
+              label: 'Workouts',
+              data: counts,
+              borderColor: '#4f46e5',
+              backgroundColor: 'rgba(79, 70, 229, 0.1)',
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: true } },
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      }
+    }
+
+    async function loadAnalyticsData(data) {
+      // Users by role
+      const usersContainer = document.getElementById('analytics-users');
+      if (data.usersByRole && data.usersByRole.length > 0) {
+        usersContainer.innerHTML = data.usersByRole.map(role => `
+          <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: #f9fafb; border-radius: 0.5rem; margin-bottom: 0.5rem;">
+            <span>${role.role?.toUpperCase()}</span>
+            <strong>${role.count}</strong>
+          </div>
+        `).join('');
+      }
+
+      // Subscriptions
+      const subsContainer = document.getElementById('analytics-subscriptions');
+      if (data.activeSubscriptions && data.activeSubscriptions.length > 0) {
+        subsContainer.innerHTML = data.activeSubscriptions.map(sub => `
+          <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: #f9fafb; border-radius: 0.5rem; margin-bottom: 0.5rem;">
+            <span>${sub.plan_type?.toUpperCase()}</span>
+            <strong>${sub.count}</strong>
+          </div>
+        `).join('');
+      }
+    }
+
+    async function loadUsers() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/admin/users', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        const tbody = document.getElementById('users-table');
+        if (data.users && data.users.length > 0) {
+          tbody.innerHTML = data.users.map(user => `
+            <tr>
+              <td><strong>${user.username}</strong></td>
+              <td>${user.email}</td>
+              <td><span class="badge badge-primary">${user.role?.toUpperCase()}</span></td>
+              <td>${new Date(user.created_at).toLocaleDateString()}</td>
+              <td><span class="badge badge-success">Active</span></td>
+              <td><button class="btn btn-small btn-outline" onclick="viewUserDetails(${user.id})">View</button></td>
+            </tr>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('Error loading users:', error);
+      }
+    }
+
+    async function loadSubscriptions() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/admin/subscriptions', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        const tbody = document.getElementById('subscriptions-table');
+        if (data.subscriptions && data.subscriptions.length > 0) {
+          tbody.innerHTML = data.subscriptions.map(sub => `
+            <tr>
+              <td><strong>${sub.username}</strong></td>
+              <td>${sub.email}</td>
+              <td><span class="badge badge-primary">${sub.plan_type?.toUpperCase()}</span></td>
+              <td><span class="badge ${sub.status === 'active' ? 'badge-success' : 'badge-danger'}">${sub.status?.toUpperCase()}</span></td>
+              <td>$${sub.price_per_month || '0'}</td>
+              <td>${sub.auto_renew ? '✓' : '✗'}</td>
+            </tr>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('Error loading subscriptions:', error);
+      }
+    }
+
+    async function loadEngagementData() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/admin/engagement', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        document.getElementById('active-users-30d').textContent = data.activeUsers;
+        document.getElementById('community-contributors').textContent = data.community?.active_users || 0;
+        document.getElementById('trainer-connections').textContent = data.trainers?.connected_clients || 0;
+
+        const summary = document.getElementById('engagement-summary');
+        summary.innerHTML = `
+          <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+            <span>Active Users (Last 30 Days)</span>
+            <strong>${data.activeUsers}</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+            <span>Community Posts (Last 30 Days)</span>
+            <strong>${data.community?.total_posts || 0}</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+            <span>Active Trainers</span>
+            <strong>${data.trainers?.active_trainers || 0}</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;">
+            <span>Active Trainer-Client Connections</span>
+            <strong>${data.trainers?.connected_clients || 0}</strong>
+          </div>
+        `;
+      } catch (error) {
+        console.error('Error loading engagement data:', error);
+      }
+    }
+
+    function loadSection(section) {
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+
+      const sectionId = section + '-section';
+      const sectionElement = document.getElementById(sectionId);
+      if (sectionElement) {
+        sectionElement.classList.remove('hidden');
+        document.querySelector(`a[onclick*="${section}"]`)?.classList.add('active');
+
+        if (section === 'analytics') {
+          loadDashboardData();
+        }
+      }
+    }
+
+    function viewUserDetails(userId) {
+      alert(`Viewing details for user ${userId}`);
+      // Could implement a modal here
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('username');
+        window.location.href = '/';
+      }
+    }
+  </script>
+</body>
+</html>

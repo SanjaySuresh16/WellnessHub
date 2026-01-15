@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WellnessHub | Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="login-page">
+
+    <div class="overlay"></div>
+
+    <div class="login-container fade-in">
+
+        <!-- LEFT SIDE CONTENT -->
+        <div class="login-left slide-left">
+            <h1 class="brand-title">Wellness <span>Hub</span></h1>
+            <p class="tagline">Your complete fitness platform for achieving wellness goals</p>
+
+            <div class="features">
+                <div class="feature-box">
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <p>Track Workouts</p>
+                </div>
+                <div class="feature-box">
+                    <i class="fa-solid fa-apple-whole"></i>
+                    <p>Monitor Nutrition</p>
+                </div>
+                <div class="feature-box">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <p>See Progress</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE FORM -->
+        <div class="login-right slide-right">
+            <h2>Welcome Back</h2>
+            <p class="sub-text">Log in to continue your fitness journey</p>
+
+<form class="login-form" id="loginForm">
+  
+  <label>Email</label>
+  <input type="email" id="email" placeholder="Enter your email">
+  <small class="error" id="emailError"></small>
+
+  <label>Password</label>
+  <input type="password" id="password" placeholder="Enter your password">
+  <small class="error" id="passwordError"></small>
+
+  <button type="submit" class="login-btn">Log In</button>
+</form>
+
+
+
+            <p class="signup-text">Don't have an account? <a href="register.html">Sign up</a></p>
+        </div>
+
+    </div>
+<script src="../assets/js/login-validation.js"></script>
+</body>
+
+</html>

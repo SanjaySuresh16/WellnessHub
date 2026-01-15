@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trainer Dashboard - WellnessHub</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo">WellnessHub</div>
+      <nav>
+        <ul>
+          <li><a href="#" onclick="loadSection('dashboard')">Dashboard</a></li>
+          <li><a href="#" onclick="loadSection('clients')">Clients</a></li>
+          <li><a href="#" onclick="loadSection('programs')">Programs</a></li>
+          <li><a href="#" onclick="loadSection('meals')">Meal Plans</a></li>
+        </ul>
+      </nav>
+      <div class="nav-buttons">
+        <button id="profile-btn" class="btn btn-outline btn-small" onclick="loadSection('profile')">Profile</button>
+        <button class="btn btn-outline btn-small" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h3 style="margin-bottom: 1.5rem; color: #1f2937;">Menu</h3>
+      <ul class="sidebar-menu">
+        <li><a href="#" onclick="loadSection('dashboard')" class="active">🏠 Dashboard</a></li>
+        <li><a href="#" onclick="loadSection('clients')">👥 Clients</a></li>
+        <li><a href="#" onclick="loadSection('programs')">🏋️ Programs</a></li>
+        <li><a href="#" onclick="loadSection('meals')">🍎 Meal Plans</a></li>
+        <li><a href="#" onclick="loadSection('profile')">⚙️ Profile</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Section -->
+      <section id="dashboard-section" class="section">
+        <h1 style="font-size: 2rem; color: #1f2937; margin-bottom: 2rem;">Dashboard</h1>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Active Clients</div>
+            <div class="stat-value" id="active-clients">0</div>
+          </div>
+          <div class="stat-card secondary">
+            <div class="stat-label">Programs Created</div>
+            <div class="stat-value" id="programs-count">0</div>
+          </div>
+          <div class="stat-card accent">
+            <div class="stat-label">Client Progress</div>
+            <div class="stat-value" id="avg-progress">0%</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 2rem;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recent Clients</div>
+            </div>
+            <div id="recent-clients" style="margin-top: 1rem;"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Programs Overview</div>
+            </div>
+            <div style="position: relative; height: 300px; margin-top: 1rem;">
+              <canvas id="programs-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Clients Section -->
+      <section id="clients-section" class="section hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <h1 style="font-size: 2rem; color: #1f2937;">My Clients</h1>
+        </div>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Assigned</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="clients-table">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 2rem; color: #6b7280;">No clients yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Programs Section -->
+      <section id="programs-section" class="section hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <h1 style="font-size: 2rem; color: #1f2937;">Workout Programs</h1>
+          <button class="btn btn-secondary" onclick="openModal('program-modal')">+ Create Program</button>
+        </div>
+
+        <div class="grid-2" id="programs-list"></div>
+      </section>
+
+      <!-- Meal Plans Section -->
+      <section id="meals-section" class="section hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <h1 style="font-size: 2rem; color: #1f2937;">Meal Plans</h1>
+          <button class="btn btn-secondary" onclick="openModal('meal-modal')">+ Create Meal Plan</button>
+        </div>
+
+        <div class="grid-2" id="meals-list"></div>
+      </section>
+
+      <!-- Profile Section -->
+      <section id="profile-section" class="section hidden">
+        <h1 style="font-size: 2rem; color: #1f2937; margin-bottom: 2rem;">My Profile</h1>
+        <div class="card">
+          <div style="max-width: 600px;">
+            <form id="profile-form" style="display: grid; gap: 1.5rem;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                  <label for="profile-firstName">First Name</label>
+                  <input type="text" id="profile-firstName" required>
+                </div>
+                <div class="form-group">
+                  <label for="profile-lastName">Last Name</label>
+                  <input type="text" id="profile-lastName" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="profile-bio">Bio</label>
+                <textarea id="profile-bio" placeholder="Tell clients about your expertise..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <!-- Program Modal -->
+  <div id="program-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 style="margin: 0;">Create Workout Program</h2>
+        <button type="button" class="modal-close" onclick="closeModal('program-modal')">✕</button>
+      </div>
+      <form id="program-form" style="display: grid; gap: 1.5rem;">
+        <div class="form-group">
+          <label for="program-name">Program Name</label>
+          <input type="text" id="program-name" required placeholder="e.g., 12-Week Strength Training">
+        </div>
+        <div class="form-group">
+          <label for="program-description">Description</label>
+          <textarea id="program-description" placeholder="Describe the program goals..."></textarea>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="form-group">
+            <label for="program-difficulty">Difficulty Level</label>
+            <select id="program-difficulty" required>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="program-weeks">Duration (weeks)</label>
+            <input type="number" id="program-weeks" required placeholder="12">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('program-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Program</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Meal Modal -->
+  <div id="meal-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 style="margin: 0;">Create Meal Plan</h2>
+        <button type="button" class="modal-close" onclick="closeModal('meal-modal')">✕</button>
+      </div>
+      <form id="meal-form" style="display: grid; gap: 1.5rem;">
+        <div class="form-group">
+          <label for="meal-name">Plan Name</label>
+          <input type="text" id="meal-name" required placeholder="e.g., High Protein Diet">
+        </div>
+        <div class="form-group">
+          <label for="meal-description">Description</label>
+          <textarea id="meal-description" placeholder="Describe the meal plan..."></textarea>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="form-group">
+            <label for="meal-calories">Daily Calories</label>
+            <input type="number" id="meal-calories" required placeholder="2000">
+          </div>
+          <div class="form-group">
+            <label for="meal-protein">Protein (g)</label>
+            <input type="number" id="meal-protein" required placeholder="150">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div class="form-group">
+            <label for="meal-carbs">Carbs (g)</label>
+            <input type="number" id="meal-carbs" required placeholder="200">
+          </div>
+          <div class="form-group">
+            <label for="meal-fat">Fat (g)</label>
+            <input type="number" id="meal-fat" required placeholder="65">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('meal-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Plan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const userRole = localStorage.getItem('userRole');
+
+      if (!token || userRole !== 'trainer') {
+        window.location.href = '/login';
+        return;
+      }
+
+      loadSection('dashboard');
+      loadDashboardData();
+      setupEventListeners();
+    });
+
+    async function loadDashboardData() {
+      try {
+        const token = localStorage.getItem('token');
+
+        // Load clients
+        const clientsRes = await fetch('/api/users/my-clients', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const clientsData = await clientsRes.json();
+
+        // Load programs
+        const programsRes = await fetch('/api/programs', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const programsData = await programsRes.json();
+
+        // Update stats
+        document.getElementById('active-clients').textContent = clientsData.clients?.length || 0;
+        document.getElementById('programs-count').textContent = programsData.programs?.length || 0;
+
+        // Load recent clients
+        loadRecentClients(clientsData.clients || []);
+        
+        // Create chart
+        createProgramsChart(programsData.programs || []);
+        
+        // Load programs list
+        loadProgramsList(programsData.programs || []);
+      } catch (error) {
+        console.error('Error loading dashboard:', error);
+      }
+    }
+
+    function loadRecentClients(clients) {
+      const container = document.getElementById('recent-clients');
+      if (clients.length === 0) {
+        container.innerHTML = '<p style="color: #6b7280; text-align: center;">No clients assigned yet</p>';
+        return;
+      }
+
+      const tbody = document.getElementById('clients-table');
+      tbody.innerHTML = clients.map(client => `
+        <tr>
+          <td><strong>${client.first_name} ${client.last_name}</strong></td>
+          <td>${client.email}</td>
+          <td>${new Date(client.assigned_at).toLocaleDateString()}</td>
+          <td><span class="badge badge-success">Active</span></td>
+          <td>
+            <button class="btn btn-small btn-primary" onclick="assignProgram(${client.id})">Assign Program</button>
+          </td>
+        </tr>
+      `).join('');
+
+      container.innerHTML = clients.slice(0, 3).map(client => `
+        <div style="padding: 1rem; background: #f9fafb; border-radius: 0.5rem; margin-bottom: 1rem;">
+          <p style="margin: 0; font-weight: 600;">${client.first_name} ${client.last_name}</p>
+          <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #6b7280;">${client.email}</p>
+        </div>
+      `).join('');
+    }
+
+    function createProgramsChart(programs) {
+      const ctx = document.getElementById('programs-chart');
+      if (ctx && programs.length > 0) {
+        const difficulty = {
+          beginner: 0,
+          intermediate: 0,
+          advanced: 0
+        };
+
+        programs.forEach(p => {
+          difficulty[p.difficulty_level]++;
+        });
+
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Beginner', 'Intermediate', 'Advanced'],
+            datasets: [{
+              data: [difficulty.beginner, difficulty.intermediate, difficulty.advanced],
+              backgroundColor: ['#4f46e5', '#10b981', '#f59e0b']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      }
+    }
+
+    async function loadProgramsList(programs) {
+      const container = document.getElementById('programs-list');
+      if (programs.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #6b7280;">No programs created yet</p>';
+        return;
+      }
+
+      container.innerHTML = programs.map(program => `
+        <div class="card">
+          <h3 style="margin-top: 0;">${program.name}</h3>
+          <p style="color: #6b7280; margin: 0.5rem 0;">${program.description || 'No description'}</p>
+          <div style="margin: 1rem 0 0 0;">
+            <span class="badge badge-primary">${program.difficulty_level}</span>
+            <span class="badge badge-secondary">${program.duration_weeks} weeks</span>
+          </div>
+          <div style="margin-top: 1rem; display: grid; gap: 0.5rem;">
+            <button class="btn btn-secondary btn-small" style="width: 100%;" onclick="editProgram(${program.id})">Edit</button>
+            <button class="btn btn-outline btn-small" style="width: 100%;" onclick="deleteProgram(${program.id})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setupEventListeners() {
+      document.getElementById('program-form').addEventListener('submit', submitProgram);
+      document.getElementById('meal-form').addEventListener('submit', submitMealPlan);
+      document.getElementById('profile-form').addEventListener('submit', saveProfile);
+    }
+
+    async function submitProgram(e) {
+      e.preventDefault();
+      const token = localStorage.getItem('token');
+
+      const programData = {
+        name: document.getElementById('program-name').value,
+        description: document.getElementById('program-description').value,
+        difficulty_level: document.getElementById('program-difficulty').value,
+        duration_weeks: parseInt(document.getElementById('program-weeks').value)
+      };
+
+      try {
+        const response = await fetch('/api/programs', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(programData)
+        });
+
+        if (response.ok) {
+          alert('Program created successfully!');
+          closeModal('program-modal');
+          loadDashboardData();
+          document.getElementById('program-form').reset();
+        }
+      } catch (error) {
+        console.error('Error creating program:', error);
+      }
+    }
+
+    async function submitMealPlan(e) {
+      e.preventDefault();
+      const token = localStorage.getItem('token');
+
+      const mealData = {
+        name: document.getElementById('meal-name').value,
+        description: document.getElementById('meal-description').value,
+        calories_target: parseInt(document.getElementById('meal-calories').value),
+        protein_target: parseInt(document.getElementById('meal-protein').value),
+        carbs_target: parseInt(document.getElementById('meal-carbs').value),
+        fat_target: parseInt(document.getElementById('meal-fat').value)
+      };
+
+      try {
+        const response = await fetch('/api/meals/plans', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(mealData)
+        });
+
+        if (response.ok) {
+          alert('Meal plan created successfully!');
+          closeModal('meal-modal');
+          document.getElementById('meal-form').reset();
+        }
+      } catch (error) {
+        console.error('Error creating meal plan:', error);
+      }
+    }
+
+    async function saveProfile(e) {
+      e.preventDefault();
+      const token = localStorage.getItem('token');
+
+      const profileData = {
+        first_name: document.getElementById('profile-firstName').value,
+        last_name: document.getElementById('profile-lastName').value,
+        bio: document.getElementById('profile-bio').value
+      };
+
+      try {
+        const response = await fetch('/api/users/profile', {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(profileData)
+        });
+
+        if (response.ok) {
+          alert('Profile updated successfully!');
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+      }
+    }
+
+    async function loadUserProfile() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/users/profile', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          const user = data.user;
+          document.getElementById('profile-firstName').value = user.first_name || '';
+          document.getElementById('profile-lastName').value = user.last_name || '';
+          document.getElementById('profile-bio').value = user.bio || '';
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      }
+    }
+
+    function loadSection(section) {
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+
+      const sectionId = section + '-section';
+      const sectionElement = document.getElementById(sectionId);
+      if (sectionElement) {
+        sectionElement.classList.remove('hidden');
+        document.querySelector(`a[onclick*="${section}"]`)?.classList.add('active');
+
+        if (section === 'profile') loadUserProfile();
+      }
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    async function assignProgram(clientId) {
+      const programId = prompt('Enter Program ID:');
+      if (!programId) return;
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/programs/${programId}/assign`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: clientId })
+        });
+
+        if (response.ok) {
+          alert('Program assigned successfully!');
+        }
+      } catch (error) {
+        console.error('Error assigning program:', error);
+      }
+    }
+
+    async function deleteProgram(id) {
+      if (!confirm('Delete this program?')) return;
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/programs/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+          loadDashboardData();
+        }
+      } catch (error) {
+        console.error('Error deleting program:', error);
+      }
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('username');
+        window.location.href = '/';
+      }
+    }
+  </script>
+</body>
+</html>
