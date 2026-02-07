@@ -2,27 +2,55 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WellnessHub</title>
+<title>WellnessHub | Home</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css?v=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<link rel="stylesheet" href="style.css">
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
-<body>
+<body class="home-page">
 
-<header class="header">
-  <div class="logo">Wellness<span>Hub</span></div>
-  <nav>
-    <a href="pages/login.html">Login</a>
-    <a href="pages/register.html">Register</a>
-  </nav>
-</header>
+<div class="overlay"></div>
 
-<section class="hero">
-  <h1>Your Fitness. Your Journey.</h1>
-  <p>Personal workouts, nutrition tracking, expert trainers and community — all in one place.</p>
-  <a href="pages/login.html" class="cta-btn">Start Now</a>
-</section>
+<div class="home-container">
+
+  <!-- LEFT -->
+  <div class="login-left">
+    <h1 class="brand-title">Wellness <span>X</span></h1>
+    <p class="tagline">Your complete fitness platform for achieving wellness goals</p>
+
+    <div class="features">
+      <div class="feature-box">
+        <i class="fa-solid fa-heartbeat"></i>
+        <p>Track Workouts</p>
+      </div>
+      <div class="feature-box">
+        <i class="fa-solid fa-apple"></i>
+        <p>Monitor Nutrition</p>
+      </div>
+      <div class="feature-box">
+        <i class="fa-solid fa-arrow-trend-up"></i>
+        <p>See Progress</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="home-right">
+    <h2>Welcome to Wellness X</h2>
+    <p class="home-subtitle">Your complete fitness platform for achieving wellness goals</p>
+    
+    <div class="home-buttons">
+      <a href="pages/login.html" class="home-btn login-btn-home">Log In</a>
+      <a href="pages/register.html" class="home-btn signup-btn-home">Sign Up</a>
+    </div>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>

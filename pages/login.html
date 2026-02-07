@@ -20,21 +20,21 @@
 
     <!-- LEFT -->
     <div class="login-left">
-      <h1 class="brand-title">Wellness <span>Hub</span></h1>
-      <p class="tagline">Your complete fitness platform</p>
+      <h1 class="brand-title">Wellness <span>X</span></h1>
+      <p class="tagline">Your complete fitness platform for achieving wellness goals</p>
 
       <div class="features">
         <div class="feature-box">
-          <i class="fa-solid fa-dumbbell"></i>
-          <p>Workouts</p>
+          <i class="fa-solid fa-heartbeat"></i>
+          <p>Track Workouts</p>
         </div>
         <div class="feature-box">
-          <i class="fa-solid fa-apple-whole"></i>
-          <p>Nutrition</p>
+          <i class="fa-solid fa-apple"></i>
+          <p>Monitor Nutrition</p>
         </div>
         <div class="feature-box">
-          <i class="fa-solid fa-chart-line"></i>
-          <p>Progress</p>
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          <p>See Progress</p>
         </div>
       </div>
     </div>
@@ -42,15 +42,23 @@
     <!-- RIGHT -->
     <div class="login-right">
       <h2>Welcome Back</h2>
+      <p class="login-subtitle">Log in to continue your fitness journey</p>
 
-      <form>
-        <input type="email" placeholder="Email">
-        <input type="password" placeholder="Password">
-        <button class="login-btn">Log In</button>
+      <form class="login-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+        <button type="submit" class="login-btn">Log In</button>
       </form>
+      
+      <div class="signup-text">
+        Don't have an account? <a href="register.html">Sign up</a>
+      </div>
     </div>
 
   </div>
 
+  <script src="../script.js"></script>
 </body>
 </html>
